@@ -20,6 +20,16 @@ public class Inventory {
     @PostPersist
     public void onPostPersist() {}
 
+    @PostLoad
+    public void makeDelay(){
+        try {
+            Thread.currentThread().sleep((long) (600 + Math.random() * 220));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static InventoryRepository repository() {
         InventoryRepository inventoryRepository = InventoryApplication.applicationContext.getBean(
             InventoryRepository.class

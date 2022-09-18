@@ -6,7 +6,7 @@ feign:
 hystrix:
   command:
     default:
-      execution.isolation.thread.timeoutInMilliseconds: 500
+      execution.isolation.thread.timeoutInMilliseconds: 610
 spring:
   application:
     name: monolith
@@ -49,7 +49,6 @@ logging:
 api:
   url:
     inventory: localhost:8082
-    inventory: localhost:8082
 
 server:
   port: 8081
@@ -82,6 +81,5 @@ spring:
 
 api:
   url:
-    inventory: inventory:8080
     inventory: inventory:8080
 

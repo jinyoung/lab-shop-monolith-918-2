@@ -26,14 +26,15 @@ public class Order {
 
     @PostPersist
     public void onPostPersist() {
-        //Following code causes dependency to external APIs
-        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
+        // //Following code causes dependency to external APIs
+        // // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
 
-        labshopmonolith.external.DecreaseStockCommand decreaseStockCommand = new labshopmonolith.external.DecreaseStockCommand();
-        // mappings goes here
-        MonolithApplication.applicationContext
-            .getBean(labshopmonolith.external.InventoryService.class)
-            .decreaseStock(/* get???(), */decreaseStockCommand);
+        // labshopmonolith.external.DecreaseStockCommand decreaseStockCommand = new labshopmonolith.external.DecreaseStockCommand();
+        // decreaseStockCommand.setQty(getQty());
+        // // mappings goes here
+        // MonolithApplication.applicationContext
+        //     .getBean(labshopmonolith.external.InventoryService.class)
+        //     .decreaseStock(Long.valueOf(getProductId()), decreaseStockCommand);
 
         OrderPlaced orderPlaced = new OrderPlaced(this);
         orderPlaced.publishAfterCommit();
@@ -42,9 +43,11 @@ public class Order {
     @PrePersist
     public void onPrePersist() {
         // Get request from Inventory
-        //labshopmonolith.external.Inventory inventory =
-        //    Application.applicationContext.getBean(labshopmonolith.external.InventoryService.class)
-        //    .getInventory(/** mapping value needed */);
+        labshopmonolith.external.Inventory inventory =
+           MonolithApplication.applicationContext.getBean(labshopmonolith.external.InventoryService.class)
+           .getInventory(Long.valueOf(getProductId()));
+
+        if(inventory.getStock() < getQty()) throw new RuntimeException("Out of Stock!");
 
     }
 
